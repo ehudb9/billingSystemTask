@@ -8,6 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 //server ROUTS//
+//TODO : orginized as a separate module
 
 //Creat a new customer
 app.post("/customer", async (req,res) => {
@@ -76,8 +77,8 @@ app.get("/customer/:id", async (req,res) => {
 // Get a credit card by cerdit_card_number
 app.get("/credit-card-by-cerdit_card_number/:cerdit_card_number", async (req,res) => {
     try {
-        console.log(BigInt(req.params));
-        const cerdit_card_number = Number(req.params);
+        console.log(req.params);
+        const {cerdit_card_number} = req.params;
         const response = await pool.query("SELECT * FROM credit_card WHERE cerdit_card_number = $1", [cerdit_card_number]);
         res.json(response.rows);
     } catch (err) {
@@ -89,7 +90,7 @@ app.get("/credit-card-by-cerdit_card_number/:cerdit_card_number", async (req,res
 app.get("/credit-card-by-customer_id/:customer_id", async (req,res) => {
     try {
         console.log(req.params);
-        const customer_id = req.params;
+        const {customer_id} = req.params;
         const response = await pool.query("SELECT * FROM credit_card WHERE customer_id = $1", [customer_id]);
         res.json(response.rows);
     } catch (err) {
@@ -100,30 +101,29 @@ app.get("/credit-card-by-customer_id/:customer_id", async (req,res) => {
 app.get("/transaction-by-serial_id/:id", async (req,res) => {
     try {
         const {id} = req.params;
-        const transacrion = await pool.query("SELECT * FROM transaction WHERE trans_id = $1", 
-        [id]);
-        res.json(transacrion.rows);
+        const response = await pool.query("SELECT * FROM transactions WHERE trans_id = $1", [id]);
+        res.json(response.rows);
     } catch (err) {
         console.error(err.message);
     }
 });
 
 // Get a transaction by customer_id
-app.get("/transaction-by-customer_id/:id", async (req,res) => {
+app.get("/transaction-by-customer_id/:customer_id", async (req,res) => {
     try {
-        const customer_id = req.params;
-        const transacrion = await pool.query("SELECT * FROM transaction WHERE customer_id = $1", [customer_id]);
-        res.json(transacrion.rows);
+        const {customer_id} = (req.params);
+        const response = await pool.query("SELECT * FROM transactions WHERE customer_id = $1", [customer_id]);
+        res.json(response.rows);
     } catch (err) {
         console.error(err.message);
     }
 });
-
+//========================
 // Get a transaction by cerdit_card_number
 app.get("/transaction-by-cerdit_card_number/:cerdit_card_number", async (req,res) => {
     try {
-        const cerdit_card_number = req.params;
-        const transacrion = await pool.query("SELECT * FROM transaction WHERE cerdit_card_number = $1", 
+        const cerdit_card_umber = req.params;
+        const transacrion = await pool.query("SELECT * FROM transactions WHERE cerdit_card_number = $1", 
         [cerdit_card_number]);
         res.json(transacrion.rows);
     } catch (err) {
@@ -137,7 +137,6 @@ app.put("/transaction/:id", async (req,res) => {
         console.log(req.params);
         const {id} = req.params;
         const {transactionDetails} = req.body;
-        //TODO : TBC  --missing updated attributes
         const updatedTransacrion = await pool.query("UPDATE transaction SET transaction = $1 WHERE customer_id = $2", 
         [transactionDetails, id]); 
 
@@ -146,13 +145,19 @@ app.put("/transaction/:id", async (req,res) => {
         console.error(err.message);
     }
 });
+//==================
+
+// Delete a customer
+//cascade
+// Delete a credit-card
+
 
 // Delete a transaction.
 app.delete("/transaction/:id", async (req,res) => {
     try {
         console.log(req.params);
         const {id} = req.params;
-        const deletedTransacrion = await pool.query("DELETE FROM transactions WHERE customer_id = $1", 
+        const deletedTransacrion = await pool.query("DELETE FROM transactions WHERE trans_id = $1", 
         [id]); 
 
         res.json(deletedTransacrion.rows[0] + " deleted!");
@@ -160,6 +165,8 @@ app.delete("/transaction/:id", async (req,res) => {
         console.error(err.message);
     }
 });
+
+//================
 
 // View all customers.
 app.get("/customer", async (req,res) => {
@@ -190,6 +197,7 @@ app.get("/transaction", async (req,res) => {
         console.error(err.message);
     }
 });
+
 
 app.listen(5000, () =>{
     console.log("The server started to listen on p.5000");
