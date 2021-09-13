@@ -4,11 +4,35 @@ const AddTransaction = () => {
     
     return (
         <Fragment>
+        
+        <button type="button" class="btn btn-primary mt-5" data-toggle="modal" data-target="#myModal">
+        Add new Transaction
+        </button>
 
-        <form className="d-flex mt-5">
-            <label>Add a new transaction</label>
-            <button className="btn-btn-success">Add a new transaction</button>
-            </form>
+        <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Heading</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <input type="text" className="form=control" />
+                </form>
+            </div>
+
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+            </div>
+        </div>
+        </div>
         </Fragment>
     );
 }

@@ -1,4 +1,5 @@
 import React,{Fragment, useState, useEffect} from "react";
+import EditTransaction from "./EditTransaction";
 
 const ListOfTransactions = () => {
     const [transaction, setTransaction] = useState([]);
@@ -56,7 +57,7 @@ const ListOfTransactions = () => {
                         <td>{transaction.total_price}</td>
                         <td>{transaction.currency}</td>
                         <td>
-                            <button>update</button>
+                            <EditTransaction transaction={transaction} />
                         </td>
                         <td>
                             <button className="btn btn-danger" onClick={() => deleteTransaction(transaction.costumer_id)}>delete</button>
