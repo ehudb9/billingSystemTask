@@ -1,7 +1,7 @@
 import React,{Fragment, useState} from "react";
 
-const InputId = () => {
-    const [id, setId] = useState("type ID");
+const GetById = () => {
+    const [id, setId] = useState("Enter ID: 123-123-123");
     //TODO : TBC-TEmplate---->>change id to the right attribute!
     const onSubmitForm = async(e) =>{
         e.preventDefault();
@@ -24,10 +24,10 @@ const InputId = () => {
         
         <form className="d-flex mt-5" onSubmit = {onSubmitForm}>
             <input className="form-control" type="text" value={id} onChange={e => setId(e.target.value)}/>
-            <button className="btn-btn-success">Get transactions</button>
+            <button className="btn btn-success">Get transactions</button>
             </form>
         </Fragment>
     );
 }
 
-export default InputId;
+export default GetById;

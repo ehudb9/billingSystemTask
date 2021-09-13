@@ -4,7 +4,7 @@ import './App.css';
 import AddTransaction from "./components/AddTransaction";
 import EditTransaction from "./components/EditTransaction";
 import UserTabs from "./components/UserTabs";
-import InputId from "./components/InputId";
+import GetById from "./components/GetById";
 import ListOfTransactions from "./components/ListOfTransactions";
 
 
@@ -18,7 +18,9 @@ function App() {
     
     <div className="container">
       <UserTabs/>
-      <InputId/>
+      <GetById/>
+      <AddTransaction/>
+      <ListOfTransactions/>
     </div>
   </Fragment>
   );
