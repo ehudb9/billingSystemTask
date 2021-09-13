@@ -1,6 +1,6 @@
-CREATE DATABASE billinsRecords
+CREATE DATABASE billingsRecords
 
-CREATE TABLE transaction(
+CREATE TABLE IF NOT EXISTS customer(
     customer_id VARCHAR PRIMARY KEY,
     first_name VARCHAR,
     last_name VARCHAR, 
@@ -9,9 +9,23 @@ CREATE TABLE transaction(
     country VARCHAR,
     city VARCHAR,
     street VARCHAR,
-    phone VARCHAR,
-    total_price VARCHAR,
-    currency VARCHAR,
+    phone VARCHAR
+);
+
+
+CREATE TABLE IF NOT EXISTS credit_card(
+    cerdit_card_number BIGINT PRIMARY KEY,
+    customer_id VARCHAR ,
     cerdit_card_type VARCHAR,
-    cerdit_card_number VARCHAR
+    CONSTRAINT fk_customer FOREIGN KEY(customer_id) REFERENCES customer(customer_id)
+);
+
+CREATE TABLE IF NOT EXISTS transactions(
+    trans_id BIGSERIAL PRIMARY KEY,
+    customer_id VARCHAR,
+    cerdit_card_number BIGINT,
+    total_price REAL,
+    currency VARCHAR,
+    CONSTRAINT fk_customer_trans FOREIGN KEY(customer_id) REFERENCES customer(customer_id)
+    CONSTRAINT fk_credit_card FOREIGN KEY(cerdit_card_number) REFERENCES credit_card(cerdit_card_number)
 );
