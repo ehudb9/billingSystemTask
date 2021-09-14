@@ -9,6 +9,7 @@ app.use(express.json());
 
 //server ROUTS//
 //TODO : orginized as a separate module
+//===========Posting-New===============//
 
 //Creat a new customer
 app.post("/customer", async (req,res) => {
@@ -57,8 +58,8 @@ app.post("/transaction", async (req,res) => {
     }
 });
 
-//====================================//
-//GETTERS//
+
+//===========GETTERS================//
 
 // Get a customer by ID
 app.get("/customer/:id", async (req,res) => {
@@ -97,58 +98,89 @@ app.get("/credit-card-by-customer_id/:customer_id", async (req,res) => {
         console.error(err.message);
     }
 });
+
 // Get a transaction by serial ID
 app.get("/transaction-by-serial_id/:id", async (req,res) => {
     try {
         const {id} = req.params;
         const response = await pool.query("SELECT * FROM transactions WHERE trans_id = $1", [id]);
+        console.log(response.rows[0]);
+        res.json(response.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//Get a transaction by customer_id 
+app.get("/get-transaction-by-customer_id/:id/", async (req, res) => {
+    try {
+        console.log(req.params.id);
+        const response = await pool.query("SELECT * FROM transactions WHERE customer_id = $1", [req.params.id]);
         res.json(response.rows);
     } catch (err) {
         console.error(err.message);
     }
 });
 
-// Get a transaction by customer_id
-app.get("/transaction-by-customer_id/:customer_id", async (req,res) => {
+// Get a transaction by cerdit_card_number
+app.get("/transaction-by-cerdit_card_number/:cerdit_card_number/", async (req,res) => {
     try {
-        const {customer_id} = (req.params);
-        const response = await pool.query("SELECT * FROM transactions WHERE customer_id = $1", [customer_id]);
+        const {cerdit_card_number} = req.params;
+        const cardNumber = parseInt(cerdit_card_number);
+        const response = await pool.query("SELECT * FROM transactions WHERE cerdit_card_number = $1", [cardNumber]);
         res.json(response.rows);
     } catch (err) {
         console.error(err.message);
     }
 });
-//========================
-// Get a transaction by cerdit_card_number
-app.get("/transaction-by-cerdit_card_number/:cerdit_card_number", async (req,res) => {
+
+//TODO: Get a transaction by serial ID or customer_id or cerdit_card_number
+//TODO: to make all the routs generic rout like  that.
+//Get a transaction by customer_id 
+app.get("/get-transaction/:getByParameter/:id/", async (req, res) => {    
     try {
-        const cerdit_card_umber = req.params;
-        const transacrion = await pool.query("SELECT * FROM transactions WHERE cerdit_card_number = $1", 
-        [cerdit_card_number]);
-        res.json(transacrion.rows);
+        console.log(req.params.id);
+        console.log(req.params.getByParameter);
+        const response = await pool.query(`SELECT * FROM transactions WHERE ${req.params.getByParameter} = ${req.params.id}`);
+        res.json(response.rows);
     } catch (err) {
         console.error(err.message);
     }
 });
+//===========UPDATES================//
+
+// Update a customer.
+
+// Update a credit card.
 
 // Update a transaction.
 app.put("/transaction/:id", async (req,res) => {
     try {
         console.log(req.params);
-        const {id} = req.params;
-        const {transactionDetails} = req.body;
-        const updatedTransacrion = await pool.query("UPDATE transaction SET transaction = $1 WHERE customer_id = $2", 
-        [transactionDetails, id]); 
+        //const {trans_id} = req.params;
+        //const transactionDetails = req.body;
+        console.log(req.body);
+        for (var i = 0; i < req.body.length; i++){
+            var obj = req.body[i];
+            for (var key in obj){
+              var value = obj[key];
+              console.log(key+ ": " + value);
+              //const updatedTransacrion = await pool.query("UPDATE transaction SET transaction = $1 WHERE trans = $2", 
+              //[transactionDetails, trans_id]); 
+            }
+          }
 
-        res.json(updatedTransacrion.rows[0]);
+        //res.json(updatedTransacrion.rows[0]);
     } catch (err) {
         console.error(err.message);
     }
 });
-//==================
+
+//===========DELETING================//
 
 // Delete a customer
 //cascade
+
 // Delete a credit-card
 
 
@@ -166,10 +198,20 @@ app.delete("/transaction/:id", async (req,res) => {
     }
 });
 
-//================
+//=======GETTER FULL TABLE===========//
+
+//View all TABLE by parameter.
+app.get("/get-all/:table_name", async (req,res) => {
+    try {
+        const allcustomers = await pool.query(`SELECT * FROM ${req.params.table_name}`);
+        res.json(allcustomers.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
 // View all customers.
-app.get("/customer", async (req,res) => {
+app.get("/get-all-customer", async (req,res) => {
     try {
         const allcustomers = await pool.query("SELECT * FROM customer");
         res.json(allcustomers.rows);
@@ -179,7 +221,7 @@ app.get("/customer", async (req,res) => {
 });
 
 // View all creditcards.
-app.get("/credit-card", async (req,res) => {
+app.get("/get-all-credit-card", async (req,res) => {
     try {
         const allCreditCards = await pool.query("SELECT * FROM credit_card");
         res.json(allCreditCards.rows);
@@ -189,7 +231,7 @@ app.get("/credit-card", async (req,res) => {
 });
 
 // View all transactions.
-app.get("/transaction", async (req,res) => {
+app.get("/get-all-transaction", async (req,res) => {
     try {
         const allTransacrion = await pool.query("SELECT * FROM transactions");
         res.json(allTransacrion.rows);
