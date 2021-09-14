@@ -1,6 +1,6 @@
 import React,{Fragment, useState} from "react";
 
-const EditTransaction = ({oldTransaction}) => {
+const Update = ({oldTransaction}) => {
    const [transaction, setTransaction] = useState(oldTransaction);
 
    const updateTrasaction = async (e) =>{
@@ -55,4 +55,4 @@ const EditTransaction = ({oldTransaction}) => {
     );
 }
 
-export default EditTransaction;
+export default Update;

@@ -1,13 +1,26 @@
 import React,{Fragment, useState} from "react";
+// import components
+import Add from "./Add";
+import ListBySearch from "./ListBySearch";
+
 
 const UserTabs = () => {
+    const [entitie, setEntitie] = useState("Customer");
+
     return (
         <Fragment>
         
-        <nav class="nav nav-pills nav-fill mt-5">
-        <a class="nav-item nav-link active" href="#">Transactions</a>
-        <a class="nav-item nav-link" href="#">Costumers</a>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" onClick={()=>setEntitie("Customer")}>Customer</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"onClick={()=>setEntitie("Transactions")}>Transactions</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"onClick={()=>setEntitie("Credit cards")}>Credit cards</a>
+            </div>
         </nav>
+
+            <Add entitie={entitie}/>
+            <ListBySearch entitie={entitie}/>
+            
         </Fragment>
     );
 }

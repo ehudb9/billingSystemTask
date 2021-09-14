@@ -133,10 +133,9 @@ app.get("/transaction-by-cerdit_card_number/:cerdit_card_number/", async (req,re
         console.error(err.message);
     }
 });
-
-//TODO: Get a transaction by serial ID or customer_id or cerdit_card_number
-//TODO: to make all the routs generic rout like  that.
-//Get a transaction by customer_id 
+/*
+//TODO: to make all the routs generic rout to avoid duplicate code.
+//Generic transaaction getter by patameters:
 app.get("/get-transaction/:getByParameter/:id/", async (req, res) => {    
     try {
         console.log(req.params.id);
@@ -147,30 +146,102 @@ app.get("/get-transaction/:getByParameter/:id/", async (req, res) => {
         console.error(err.message);
     }
 });
+
+//Generic getter by patameters:
+app.get("/get-by-parameters/:table_name/:getByParameter/:id/", async (req, res) => {    
+    try {
+        console.log(req.params.id);
+        console.log(req.params.getByParameter);
+        console.log(req.params.table_name);
+        const parameter = req.params.getByParameter;
+        const id = req.params.id;
+        const response = await pool.query(`SELECT * FROM ${req.params.table_name} WHERE ${parameter} = cast(${id} as VARCHAR)`);
+        res.json(response.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});*/
+
 //===========UPDATES================//
 
-// Update a customer.
-
-// Update a credit card.
-
-// Update a transaction.
-app.put("/transaction/:id", async (req,res) => {
+//TODO: must be more eficient!!
+// Update a customer by id.
+app.put("/edit-costumer-by-id/:id/", async (req, res) => {
     try {
         console.log(req.params);
-        //const {trans_id} = req.params;
-        //const transactionDetails = req.body;
-        console.log(req.body);
-        for (var i = 0; i < req.body.length; i++){
-            var obj = req.body[i];
-            for (var key in obj){
-              var value = obj[key];
-              console.log(key+ ": " + value);
-              //const updatedTransacrion = await pool.query("UPDATE transaction SET transaction = $1 WHERE trans = $2", 
-              //[transactionDetails, trans_id]); 
+        const id = req.params.id;
+        const updateDetails = req.body;
+        var response = updateDetails;
+        console.log("\nUpdating:->");
+        for (var key in updateDetails[0]){
+            var value = updateDetails[0][key];
+            console.log(key +" : "+ value);
+            if(key == "first_name") {
+                response = await pool.query("UPDATE customer SET first_name = $1 WHERE customer_id = $2", [value,id]);
+            }else if(key=="last_name"){
+                response = await pool.query(`UPDATE customer SET last_name = $1 WHERE customer_id = $2`, [value,id]);
+            }else if(key=="email"){
+                response = await pool.query(`UPDATE customer SET email = $1 WHERE customer_id = $2`, [value,id]);
+            }else if(key=="gender"){
+                response = await pool.query(`UPDATE customer SET gender = $1 WHERE customer_id = $2`, [value,id]);
+            }else if(key=="phone"){
+                response = await pool.query(`UPDATE customer SET phone = $1 WHERE customer_id = $2`, [value,id]);
             }
-          }
+        }
+        res.json(response.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
-        //res.json(updatedTransacrion.rows[0]);
+//no Update a credit card because the fields are primary- no make sence.
+
+// Update a transaction.
+app.put("/edit-transaction-by-id/:id/", async (req, res) => {
+    try {
+        console.log(req.params);
+        const id = req.params.byId;
+        const updateDetails = req.body;
+        console.log("\nUpdating:->");
+        
+        for (var key in updateDetails[0]){
+            var value = updateDetails[0][key];
+            console.log(key +" : "+ value);
+            if(key == "customer_id") {
+                response = await pool.query("UPDATE transactions SET customer_id = $1 WHERE trans_id = $2", [value,id]);
+            }else if(key=="cerdit_card_number"){
+                response = await pool.query(`UPDATE transactions SET cerdit_card_number = $1 WHERE trans_id = $2`, [value,id]);
+            }else if(key=="total_price"){
+                response = await pool.query(`UPDATE transactions SET total_price = $1 WHERE trans_id = $2`, [value,id]);
+            }else if(key=="currency"){
+                response = await pool.query(`UPDATE transactions SET currency = $1 WHERE trans_id = $2`, [value,id]);
+            }
+        }
+        res.json(updatedFields.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//TODO: generic update
+// Update by table name and parametr with new body fields.
+app.put("/edit/:table/:parameter_id/:byId/", async (req, res) => {
+    try {
+        console.log(req.params);
+        const id = req.params.byId;
+        const parameter = req.params.parameter_id;
+        const table_name = req.params.table;
+        // console.log(table_name);
+        const updateDetails = req.body;
+        console.log("\nUpdating:->");
+        for (var key in updateDetails[0]){
+            var value = updateDetails[0][key];
+            console.log(key +" : "+ value);
+            //const updatedFields = await pool.query(`UPDATE ${table_name} SET ${key} = ${value} WHERE ${parameter} = ${id}`);
+            // const updatedFields = await pool.query("UPDATE [ONLY] $1 SET $2 = $3 WHERE $4 = $5", [table_name, key ,value ,parameter ,id]);
+            const updatedFields = await pool.query("UPDATE customer SET first_name = $1 WHERE customer_id = $2", [value,id]);
+        }
+        res.json(updatedFields.rows);
     } catch (err) {
         console.error(err.message);
     }
@@ -178,21 +249,43 @@ app.put("/transaction/:id", async (req,res) => {
 
 //===========DELETING================//
 
-// Delete a customer
-//cascade
+// Delete a customer -- with al related cards and transactions - using cascade
+app.delete("/customer/:customer_id/", async (req,res) => {
+    try {
+        console.log(req.params);
+        const {customer_id} = req.params;
+        console.log(customer_id);
+        const deletedCard = await pool.query("DELETE FROM customer WHERE customer_id = $1 CASCADE", [customer_id]); 
+        res.json(deletedCard.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
+
+//TODO: update related transactions somehow
 // Delete a credit-card
-
+app.delete("/credit_card/:cerdit_card_number", async (req,res) => {
+    try {
+        console.log(req.params);
+        const {cerdit_card_number} = req.params;
+        console.log(cerdit_card_number);
+        const deletedCard = await pool.query("DELETE FROM credit_card WHERE cerdit_card_number = $1", [cerdit_card_number]); 
+        res.json(deletedCard.rows);
+        // TODO: make any save for related transactions!
+        //----ALTER TABLE transactions DROP CONSTRAINT fk_credit_card;
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
 // Delete a transaction.
 app.delete("/transaction/:id", async (req,res) => {
     try {
         console.log(req.params);
         const {id} = req.params;
-        const deletedTransacrion = await pool.query("DELETE FROM transactions WHERE trans_id = $1", 
-        [id]); 
-
-        res.json(deletedTransacrion.rows[0] + " deleted!");
+        const deletedTransacrion = await pool.query("DELETE FROM transactions WHERE trans_id = $1", [id]); 
+        res.json(deletedTransacrion.rows);
     } catch (err) {
         console.error(err.message);
     }
@@ -211,7 +304,7 @@ app.get("/get-all/:table_name", async (req,res) => {
 });
 
 // View all customers.
-app.get("/get-all-customer", async (req,res) => {
+app.get("/get-all-customers", async (req,res) => {
     try {
         const allcustomers = await pool.query("SELECT * FROM customer");
         res.json(allcustomers.rows);

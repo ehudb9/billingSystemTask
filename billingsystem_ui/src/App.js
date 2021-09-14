@@ -1,26 +1,20 @@
 import React,{Fragment} from 'react';
 import './App.css';
 // import components
-import AddTransaction from "./components/AddTransaction";
-import EditTransaction from "./components/EditTransaction";
+import Add from "./components/Add";
+import Update from "./components/Update";
 import UserTabs from "./components/UserTabs";
-import GetById from "./components/GetById";
-import ListOfTransactions from "./components/ListOfTransactions";
+import ListOfTransactions from "./components/ListBySearch";
 
 
 
 function App() {
   return (
   <Fragment>
-    <header>
-    <h1 className="text=center mt-5">AcroCharge Billing System</h1>
-    </header>
-    
+  <div class="d-flex justify-content-center">
+    <h1>AcroCharge Billing System</h1></div>
     <div className="container">
       <UserTabs/>
-      <GetById/>
-      <AddTransaction/>
-      <ListOfTransactions/>
     </div>
   </Fragment>
   );

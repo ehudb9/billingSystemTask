@@ -1,12 +1,12 @@
 import React,{Fragment, useState} from "react";
 
-const AddTransaction = () => {
+const Add = ({entitie}) => {
     
     return (
         <Fragment>
         
         <button type="button" class="btn btn-primary mt-5" data-toggle="modal" data-target="#myModal">
-        Add new Transaction
+        Add new {entitie}
         </button>
 
         <div class="modal" id="myModal">
@@ -37,4 +37,4 @@ const AddTransaction = () => {
     );
 }
 
-export default AddTransaction;
+export default Add;
