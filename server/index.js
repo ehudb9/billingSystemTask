@@ -171,6 +171,7 @@ app.put("/edit-costumer-by-id/:id/", async (req, res) => {
         console.log(req.params);
         const id = req.params.id;
         const updateDetails = req.body;
+        console.log(updateDetails);
         var response = updateDetails;
         console.log("\nUpdating:->");
         for (var key in updateDetails[0]){
@@ -231,16 +232,22 @@ app.put("/edit/:table/:parameter_id/:byId/", async (req, res) => {
         const id = req.params.byId;
         const parameter = req.params.parameter_id;
         const table_name = req.params.table;
-        // console.log(table_name);
+        console.log(table_name);
         const updateDetails = req.body;
         console.log("\nUpdating:->");
+        let query = "UPDATE "  + table_name + " SET";
         for (var key in updateDetails[0]){
+            
             var value = updateDetails[0][key];
-            console.log(key +" : "+ value);
+            console.log(key + " : " + value);
+            query +=" " + key +" = '"+ value+ "',"; 
             //const updatedFields = await pool.query(`UPDATE ${table_name} SET ${key} = ${value} WHERE ${parameter} = ${id}`);
-            // const updatedFields = await pool.query("UPDATE [ONLY] $1 SET $2 = $3 WHERE $4 = $5", [table_name, key ,value ,parameter ,id]);
-            const updatedFields = await pool.query("UPDATE customer SET first_name = $1 WHERE customer_id = $2", [value,id]);
+            // const updatedFields = await pool.query("UPDATE $1 SET $2 = $3 WHERE $4 = $5", [table_name, key ,value ,parameter ,id]);
+            //const updatedFields = await pool.query("UPDATE customer SET first_name = $1 WHERE customer_id = $2", [value,id]);
         }
+        query = query.slice(0, query.length-1) +  " WHERE " + parameter + " = '" + id + "'";
+        console.log(query);
+        const updatedFields = await pool.query(query);
         res.json(updatedFields.rows);
     } catch (err) {
         console.error(err.message);
@@ -255,7 +262,7 @@ app.delete("/customer/:customer_id/", async (req,res) => {
         console.log(req.params);
         const {customer_id} = req.params;
         console.log(customer_id);
-        const deletedCard = await pool.query("DELETE FROM customer WHERE customer_id = $1 CASCADE", [customer_id]); 
+        const deletedCard = await pool.query("DELETE FROM customer WHERE customer_id = $1", [customer_id]); 
         res.json(deletedCard.rows);
     } catch (err) {
         console.error(err.message);

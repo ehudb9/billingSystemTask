@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS credit_card(
     cerdit_card_number BIGINT PRIMARY KEY,
     customer_id VARCHAR ,
     cerdit_card_type VARCHAR,
-    CONSTRAINT fk_customer FOREIGN KEY(customer_id) REFERENCES customer(customer_id)
+    CONSTRAINT fk_customer FOREIGN KEY(customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS transactions(
@@ -26,6 +26,5 @@ CREATE TABLE IF NOT EXISTS transactions(
     cerdit_card_number BIGINT,
     total_price REAL,
     currency VARCHAR,
-    CONSTRAINT fk_customer_trans FOREIGN KEY(customer_id) REFERENCES customer(customer_id)
-    CONSTRAINT fk_credit_card FOREIGN KEY(cerdit_card_number) REFERENCES credit_card(cerdit_card_number)
+    CONSTRAINT fk_customer_trans FOREIGN KEY(customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
 );
