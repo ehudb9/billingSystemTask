@@ -44,7 +44,7 @@ app.post("/credit-card", async (req,res) => {
 });
 
 // Create a new transaction.
-app.post("/transaction", async (req,res) => {
+app.post("/transactions", async (req,res) => {
     try {
         console.log(req.body);
         const newTransaction = req.body;
@@ -146,6 +146,7 @@ app.get("/get-transaction/:getByParameter/:id/", async (req, res) => {
         console.error(err.message);
     }
 });
+*/
 
 //Generic getter by patameters:
 app.get("/get-by-parameters/:table_name/:getByParameter/:id/", async (req, res) => {    
@@ -155,12 +156,14 @@ app.get("/get-by-parameters/:table_name/:getByParameter/:id/", async (req, res) 
         console.log(req.params.table_name);
         const parameter = req.params.getByParameter;
         const id = req.params.id;
-        const response = await pool.query(`SELECT * FROM ${req.params.table_name} WHERE ${parameter} = cast(${id} as VARCHAR)`);
+        const query = "SELECT * FROM " + req.params.table_name + " WHERE " + parameter + " = '" + id + "'";
+        console.log(query);
+        const response = await pool.query(query);
         res.json(response.rows);
     } catch (err) {
         console.error(err.message);
     }
-});*/
+});
 
 //===========UPDATES================//
 
@@ -224,7 +227,6 @@ app.put("/edit-transaction-by-id/:id/", async (req, res) => {
     }
 });
 
-//TODO: generic update
 // Update by table name and parametr with new body fields.
 app.put("/edit/:table/:parameter_id/:byId/", async (req, res) => {
     try {
@@ -287,7 +289,7 @@ app.delete("/credit_card/:cerdit_card_number", async (req,res) => {
 });
 
 // Delete a transaction.
-app.delete("/transaction/:id", async (req,res) => {
+app.delete("/transactions/:id", async (req,res) => {
     try {
         console.log(req.params);
         const {id} = req.params;
@@ -331,7 +333,7 @@ app.get("/get-all-credit-card", async (req,res) => {
 });
 
 // View all transactions.
-app.get("/get-all-transaction", async (req,res) => {
+app.get("/get-all-transactions", async (req,res) => {
     try {
         const allTransacrion = await pool.query("SELECT * FROM transactions");
         res.json(allTransacrion.rows);
