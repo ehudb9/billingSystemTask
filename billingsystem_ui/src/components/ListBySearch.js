@@ -5,7 +5,7 @@ import GetById from "./GetById";
 const ListBySearch = ({entitie}) => {
     const [jsonData, setJsonData] = useState([]);
     const [id, setId] = useState("Enter ID: 123-123-123");
-    const [searchParams, setSearchParams] = useState(["Customer ID"]);
+    const [searchParams, setSearchParams] = useState(["customer_id"]);
 
     const onSubmitForm = async(e) =>{
         e.preventDefault();
@@ -30,9 +30,8 @@ const ListBySearch = ({entitie}) => {
             console.log(err.message);
         }
     }
+
     
-    
-   
     useEffect(() => {
         getJsonData();
     }, []);
@@ -54,8 +53,7 @@ const ListBySearch = ({entitie}) => {
             <input className="form-control" type="text" value={id} onChange={e => setId(e.target.value)}/>
             <button className="btn btn-success">Get {entitie} by {searchParams}</button>
             </form>
-            <Table/>
-            
+            <Table entitie={entitie} jsonData={jsonData}/>
             </div>
         </Fragment>
     );
