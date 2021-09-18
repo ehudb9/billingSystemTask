@@ -1,5 +1,4 @@
 import React,{Fragment, useState} from "react";
-import Delete from "./Delete";
 import Update from "./Update";
 
 
@@ -97,7 +96,7 @@ const Table = ({entitie, jsonData ,getList}) => {
                         <td>     
                         </td>
                         <td>
-                            <Delete entitie={entitie} jsonData={jsonData}/>
+                        <button className="btn btn-danger" onClick={() => handleDelete(jsonData.cerdit_card_number)}>delete</button>
                         </td>
                     </tr>
                 ))} 

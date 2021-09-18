@@ -31,32 +31,52 @@ const ListBySearch = ({entitie}) => {
         }
     }
 
-    // const func = async() => {
-    //     console.log("BOOOOOO")
-    // }
-    // useEffect(() => {
-    //     getJsonData();
-    // },[]);
-    
     return (
         <Fragment>
             <Add entitie={entitie} getList={getJsonData}/>
             
             <div class="container mt-5">
             <h2>Display {entitie} by</h2>
-           
-            <nav aria-label>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" onClick={()=>setSearchParams("customer_id")}>Customer ID</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"onClick={()=>setSearchParams("credit_card_number")}>Credit number</a>
-                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"onClick={()=>setSearchParams("trans_id")}>Transaction serival ID</a>
-                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"onClick={()=>setSearchParams("view_all")}>View all</a>
-            </div>
-            </nav>
-            <form className="d-flex mt-5" onSubmit = {onSubmitForm}>            
-            <input className="form-control" type="text" value={id} onChange={e => setId(e.target.value)}/>
-            <button className="btn btn-success">Get {entitie} by {searchParams}</button>
-            </form>
+            {(() => {if(entitie.toLowerCase() == "customer"){
+                return <nav aria-label>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="false" onClick={()=>setSearchParams("customer_id")}>Customer ID</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"onClick={()=>setSearchParams("view_all")}>View all</a>
+                </div>
+                </nav>;
+            }else if(entitie == "transactions"){
+                return <nav aria-label>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="false" onClick={()=>setSearchParams("customer_id")}>Customer ID</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"onClick={()=>setSearchParams("credit_card_number")}>Credit number</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"onClick={()=>setSearchParams("trans_id")}>Transaction serival ID</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"onClick={()=>setSearchParams("view_all")}>View all</a>
+                </div>
+                </nav>;
+            }else if(entitie == "credit_card"){
+                return <nav aria-label>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"onClick={()=>setSearchParams("credit_card_number")}>Credit number</a>
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="false" onClick={()=>setSearchParams("customer_id")}>Customer ID</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false"onClick={()=>setSearchParams("view_all")}>View all</a>
+                </div>
+                </nav>;
+            }
+            })()}
+            
+            {(() => {
+                if (searchParams == "view_all") {
+                    return <form className="d-flex mt-5" onSubmit = {onSubmitForm}>            
+                    <button className="btn btn-success">Get {entitie} by {searchParams}</button>
+                    </form>;
+                } else {
+                return <form className="d-flex mt-5" onSubmit = {onSubmitForm}>            
+                <input className="form-control" type="text" value={id} onChange={e => setId(e.target.value)}/>
+                <button className="btn btn-success">Get {entitie} by {searchParams}</button>;
+                 </form>
+            }
+            })()}
+            
             <Table entitie={entitie} jsonData={jsonData} getList={getJsonData}/>
             </div>
         </Fragment>
