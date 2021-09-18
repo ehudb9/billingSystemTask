@@ -12,44 +12,12 @@ const Add = ({entitie, getList}) => {
             });
 
             //refresh window after sumbit
-            //window.location = "/";
+            getList();
         } catch (err) {
             console.log(err.message)
         }
     }
-    /*
-    const creatCustomer = (e) => {
-        e.preventDefault();
-        setBodyRequest([{
-                customer_id: customer_id,
-                first_name: first_name,
-                last_name: last_name,
-                email: email,
-                gender: gender,
-                country: country,
-                city: city,
-                street: street,
-                phone: phone
-        }]);
-        //onSubmitForm("");
-    }
 
-    const creatTransaction = (e) => {
-        e.preventDefault();
-        setBodyRequest({
-            email: "e.target.dscsdsvalue"
-        });
-        onSubmitForm("");
-    }
-
-    const creatCreditCard = (e) => {
-        e.preventDefault();
-        setBodyRequest({
-            email: "e.target.dscsdsvalue"
-        });
-        onSubmitForm("");
-    }
-*/
     const submitForm = () => {
         
         if(entitie.toLowerCase() == "customer"){

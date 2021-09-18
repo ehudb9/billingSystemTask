@@ -17,7 +17,7 @@ app.post("/customer", async (req,res) => {
         const newCustomer = req.body;
         //const json = '{"customer_id": "387-63-2772","first_name": "Ellwood", "last_name": "Speirs", "email": "espeirs1@mediafire.com", "gender": "Male", "country": "Indonesia", "city": "Kiarajangkung", "street": "4368 Sloan Trail", "phone": "660-819-9883"}'
         //const parsed = await JSON.parse(json);
-        
+
         const response = await pool.query("INSERT INTO customer(customer_id, first_name, last_name, email, gender, country, city, street, phone)" +
         " VALUES($1,$2,$3,$4,$5, $6, $7 ,$8, $9) RETURNING *", 
         [newCustomer["customer_id"], newCustomer["first_name"], newCustomer["last_name"], newCustomer["email"], newCustomer["gender"], newCustomer["country"], newCustomer["city"], newCustomer["street"], newCustomer["phone"]]);
@@ -222,9 +222,9 @@ app.put("/edit/:table/:parameter_id/:byId/", async (req, res) => {
         const updateDetails = req.body;
         console.log("\nUpdating:->");
         let query = "UPDATE "  + table_name + " SET";
-        for (var key in updateDetails[0]){
+        for (var key in updateDetails){
             
-            var value = updateDetails[0][key];
+            var value = updateDetails[key];
             console.log(key + " : " + value);
             query +=" " + key +" = '"+ value+ "',"; 
             //const updatedFields = await pool.query(`UPDATE ${table_name} SET ${key} = ${value} WHERE ${parameter} = ${id}`);

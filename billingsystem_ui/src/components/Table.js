@@ -17,6 +17,9 @@ const Table = ({entitie, jsonData ,getList}) => {
         getList();
     }
 
+    const refreshTable = () =>{
+        getList();
+    }
     return (
         <Fragment>
             {(() => {
@@ -38,7 +41,7 @@ const Table = ({entitie, jsonData ,getList}) => {
                         <td>{jsonData.first_name}</td>
                         <td>{jsonData.last_name}</td>
                         <td>
-                            <Update entitie={entitie} jsonData={jsonData}/>
+                            <Update entitie={entitie} rowData={jsonData} refreshTable={refreshTable}/>
                         </td>
                         <td>
                             <button className="btn btn-danger" onClick={() => handleDelete(jsonData.customer_id)}>Delete</button>
@@ -65,7 +68,7 @@ const Table = ({entitie, jsonData ,getList}) => {
                         <td>{jsonData.total_price}</td>
                         <td>{jsonData.currency}</td>
                         <td>
-                            <Update entitie={entitie} jsonData={jsonData}/>
+                            <Update entitie={entitie} rowData={jsonData} refreshTable={refreshTable}/>
                         </td>
                         <td>
                             <button className="btn btn-danger" onClick={() => handleDelete(jsonData.trans_id)}>delete</button>
