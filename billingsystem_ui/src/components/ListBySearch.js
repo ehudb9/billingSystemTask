@@ -1,6 +1,6 @@
 import React,{Fragment, useState, useEffect} from "react";
 import Table from "./Table";
-import GetById from "./GetById";
+import Add from "./Add";
 
 const ListBySearch = ({entitie}) => {
     const [jsonData, setJsonData] = useState([]);
@@ -31,15 +31,19 @@ const ListBySearch = ({entitie}) => {
         }
     }
 
-    
-    useEffect(() => {
-        getJsonData();
-    }, []);
+    // const func = async() => {
+    //     console.log("BOOOOOO")
+    // }
+    // useEffect(() => {
+    //     getJsonData();
+    // },[]);
     
     return (
         <Fragment>
+            <Add entitie={entitie} getList={getJsonData}/>
+            
             <div class="container mt-5">
-            <h2>List of {entitie}</h2>
+            <h2>Display {entitie} by</h2>
            
             <nav aria-label>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -53,7 +57,7 @@ const ListBySearch = ({entitie}) => {
             <input className="form-control" type="text" value={id} onChange={e => setId(e.target.value)}/>
             <button className="btn btn-success">Get {entitie} by {searchParams}</button>
             </form>
-            <Table entitie={entitie} jsonData={jsonData}/>
+            <Table entitie={entitie} jsonData={jsonData} getList={getJsonData}/>
             </div>
         </Fragment>
     );

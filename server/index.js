@@ -15,7 +15,6 @@ app.use(express.json());
 app.post("/customer", async (req,res) => {
     try {
         const newCustomer = req.body;
-
         //const json = '{"customer_id": "387-63-2772","first_name": "Ellwood", "last_name": "Speirs", "email": "espeirs1@mediafire.com", "gender": "Male", "country": "Indonesia", "city": "Kiarajangkung", "street": "4368 Sloan Trail", "phone": "660-819-9883"}'
         //const parsed = await JSON.parse(json);
         
@@ -30,7 +29,7 @@ app.post("/customer", async (req,res) => {
 });
 
 //Creat a new credit card
-app.post("/credit-card", async (req,res) => {
+app.post("/credit_card", async (req,res) => {
     try {
         const newCreditCard = req.body;
         const response = await pool.query("INSERT INTO credit_card(cerdit_card_number, customer_id, cerdit_card_type)" +
@@ -133,20 +132,6 @@ app.get("/transaction-by-cerdit_card_number/:cerdit_card_number/", async (req,re
         console.error(err.message);
     }
 });
-/*
-//TODO: to make all the routs generic rout to avoid duplicate code.
-//Generic transaaction getter by patameters:
-app.get("/get-transaction/:getByParameter/:id/", async (req, res) => {    
-    try {
-        console.log(req.params.id);
-        console.log(req.params.getByParameter);
-        const response = await pool.query(`SELECT * FROM transactions WHERE ${req.params.getByParameter} = ${req.params.id}`);
-        res.json(response.rows);
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-*/
 
 //Generic getter by patameters:
 app.get("/get-by-parameters/:table_name/:getByParameter/:id/", async (req, res) => {    
@@ -167,7 +152,6 @@ app.get("/get-by-parameters/:table_name/:getByParameter/:id/", async (req, res) 
 
 //===========UPDATES================//
 
-//TODO: must be more eficient!!
 // Update a customer by id.
 app.put("/edit-costumer-by-id/:id/", async (req, res) => {
     try {

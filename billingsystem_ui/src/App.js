@@ -11,7 +11,7 @@ import ListOfTransactions from "./components/ListBySearch";
 function App() {
   return (
   <Fragment>
-  <div class="d-flex justify-content-center">
+  <div className="d-flex justify-content-center">
     <h1>AcroCharge Billing System</h1></div>
     <div className="container">
       <UserTabs/>
