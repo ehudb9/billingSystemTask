@@ -110,6 +110,6 @@ you can view, add,update customers,transactions,and cards.
         - [ ] secuire all customer changes with password fields
         - [ ] add more types of get querys: for example - search all customer's cards/transactions with join tables
 
-    * front-end:
+   * front-end:
         - [ ] create login stage-> effect the main state/all the componente every merchant/customer with thier password can look for all thier own data
         - [ ] adding variables for each type of tada in order to be able to move between tads on the navbar withput deleting the tables
